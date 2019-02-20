@@ -141,9 +141,9 @@ int main(int argc, char *argv[])
     parser.userdata = &myState;
 
     /* Set the path to save the html file */
-    myState.tmp1 = fopen( "/tmp/htmldata.html", "w" );
+    myState.tmp1 = fopen( "tmp/htmldata.html", "w" );
     /* Set the path to save the extracted web-links */
-    myState.tmp2 = fopen( "/tmp/weblinksdata.html", "w" );
+    myState.tmp2 = fopen( "tmp/weblinksdata.html", "w" );
 
 
     /* Setup our event handler.
