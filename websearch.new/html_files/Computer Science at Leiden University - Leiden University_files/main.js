@@ -1,0 +1,1 @@
+(function(){UL2.getScript("ul2common/main");UL2.getScripts({".article-form":["lib/jquery-ui/datepicker","ul2common/locale","ul2external/article-form"],".publications":"ul2external/publications","[data-video]":"ul2external/video"})})();

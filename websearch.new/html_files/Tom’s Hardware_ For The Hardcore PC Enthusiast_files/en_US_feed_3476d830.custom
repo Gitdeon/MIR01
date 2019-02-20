@@ -1,0 +1,129 @@
+var Purch = window.Purch || {};
+Purch.CtwShoppingBlockDealsWidget = Purch.CtwShoppingBlockDealsWidget || (function(){
+
+    function _extend(a, b){
+        var key;
+        for(key in b) {
+            if (b.hasOwnProperty(key)) {
+                if(typeof a[key] === 'object'){
+                    //var ext = _extend(a[key], b[key] || {});
+                    a[key] =  _extend(a[key], b[key] || {});
+
+                }else{
+                    a[key] = b[key];
+                }
+            }
+        }
+        return a;
+    }
+
+    return {
+        init : function(conf) {
+
+            var CONFIG = _extend({
+                "target": "body",
+                "position": "afterbegin",
+                "phId": "ctWidgetPh",
+                "lib":  "js/min/widgets/ctw-shopping-block-deals.js",
+                "ngApp": "ctWidgetApp",
+                'widgetNS':'ctw-shopping-block',
+                'widgetClass': 'ctw-shopping-block-deals',
+                'widgetParams':{
+                    "type": "deals-widget",
+                    "height": 800,
+                    'colors':'#f3f4f6, #000, #ddd, #0497f2, #44c31d, #b4b4b4',
+                    initCb: function($scope, $doc, $win){
+                        $scope.TRACKING.trackGAClick($doc, $win, $scope.dataItems, 'gtmDataLayer', 'a', '.ctw-shopping-block-deals-item');
+                    }
+                },
+                "datas":  [ { 
+'headline': "Samsung\x2064GB\x20MicroSD\x20EVO\x20Card\x20w\x2F\x20Adapter", 
+'old_price':"\x2413.99", 
+'price': "\x249.99", 
+'image' : "https://img.purch.com/r/200x112/aHR0cDovL3guc2hvcHNhdnZ5LmNvbS9zaG9wc2F2dnkucHJvZHVjdGltYWdlcy9hbWF6b24vQjA2WFgyOVM5US9jNzE4MzhlOC0zNTBjLTQ5YTQtOGJlOC0zYzVjZTRmY2RmN2Y=" ,
+'url': "https://t.purch.com/ZXR5cGU6OmNsaWNrfHV1aWQ6OjJudG90b3N1ZnBpfHJhYXNvZmZlcjo6ZXlKd1lYSmxiblJNYVc1clNXNUJabVpwYkdsaGRHVWlPbVpoYkhObExDSndZWEpsYm5STWFXNXJJanBtWVd4elpTd2ljR0Z5Wlc1MFRHbHVhMDkyWlhKeWFXUmxJanBtWVd4elpTd2liM1YwVDJaVGRHOWpheUk2Wm1Gc2MyVXNJbVp5YjIxU2RXeGxJanAwY25WbExDSnRaWEpuWldSV1lYSnBZV0pzWlhNaU9uc2lVMGxVUlNJNklsUklWVk1pTENKVFNWUkZMVVpWVkZWU1JTSTZJblJ2YlhOb1lYSmtkMkZ5WlNJc0lsZEJURlJCUnlJNklqWmpNR0l3TkRaaU0yVXdaV00zTkRabVltSmxPV0l3TTJaaFl6Tm1NRGxpSWl3aVVGSlBSRlZEVkY5RFFVMVFRVWxIVGw5SlJDSTZJbUZ0WVhwdmJpMTBiMjF6WjNWcFpHVXRaR1ZoYkhNdGNtVjJhV1YzY3kxeWRXeGxMVEUwTnpVMU9EUTVOell4TlRBdE5URTNNaTFVU0ZWVExXUmxabUYxYkhRdGNuVnNaU0lzSWtOS1YwVkNVMGxVUlMxR1ZWUlZVa1VpT2lJNE9UQXdNalEySWl3aVVrRkxWRUZISWpvaUpIdFFRVWRGT2xKQlMxUkJSMzBpTENKVVFVY2lPaUppYjIxZmRHOXRjMmhoY21SM1lYSmxMVEl3SWl3aVFVMWFRVkJKSWpvaVFVdEpRVXBNV1V0UVVreFlWVk5HTkVkRVNWRWlmU3dpYkc5allXeHBlbVZrSWpwbVlXeHpaU3dpWTJGdGNHRnBaMjVmYVdRaU9pSmhiV0Y2YjI0dGRHOXRjMmQxYVdSbExXUmxZV3h6TFhKbGRtbGxkM010Y25Wc1pTMHhORGMxTlRnME9UYzJNVFV3TFRVeE56SWlMQ0p3Y205a2RXTjBYMmxrSWpvaVJVdExUVmRLVFNJc0ltOTFkR0p2ZFc1a1gzVnliQ0k2SW1oMGRIQnpPbHd2WEM5M2QzY3VZVzFoZW05dUxtTnZiVnd2VTJGdGMzVnVaeTFOYVdOeWIxTkVMVUZrWVhCMFpYSXRUVUl0VFVVMk5FZEJMVUZOWEM5a2NGd3ZRakEyV0ZneU9WTTVVU0lzSW0xaFkzSnZYM1JsYlhCc1lYUmxjeUk2V3lJbFZFRlNSMFZVWDFWU1RDVS9kR0ZuUFdoaGQyc3RablYwZFhKbExUSXdKbUZ6WTNOMVluUmhaejBsVTBsVVJTMUdWVlJWVWtVbExTVmpiMjUwWlc1MFNVUWxMVEl3SWwwc0luQnliMlIxWTNSZmJtRnRaU0k2Ym5Wc2JDd2lZWE5wYmw5cFpDSTZiblZzYkN3aWNISnBZMlVpT2lJa09TNDVPU0lzSW5KaGQxOXdjbWxqWlNJNklqa3VPVGtpTENKamIzVnVkSEo1WDJOdlpHVWlPaUpWVXlJc0ltTjFjbkpsYm1ONVgyTnZaR1VpT2lKVlUwUWlMQ0pqZFhKeVpXNWplVjl6ZVcxaWIyd2lPaUlrSWl3aVlXWm1hV3hwWVhSbFgybGtJam9pWVcxaGVtOXVMV1oxZEhWeVpTMWtaV1poZFd4MElpd2lkbUZ5YVdGaWJHVnpJanA3SWxOSlZFVWlPaUpVU0ZWVElpd2lVMGxVUlMxR1ZWUlZVa1VpT2lKMGIyMXphR0Z5WkhkaGNtVWlMQ0pYUVV4VVFVY2lPaUkyWXpCaU1EUTJZak5sTUdWak56UTJabUppWlRsaU1ETm1ZV016WmpBNVlpSXNJbEJTVDBSVlExUmZRMEZOVUVGSlIwNWZTVVFpT2lKaGJXRjZiMjR0ZEc5dGMyZDFhV1JsTFdSbFlXeHpMWEpsZG1sbGQzTXRjblZzWlMweE5EYzFOVGcwT1RjMk1UVXdMVFV4TnpJdFZFaFZVeTFrWldaaGRXeDBMWEoxYkdVaUxDSkRTbGRGUWxOSlZFVXRSbFZVVlZKRklqb2lPRGt3TURJME5pSXNJbEpCUzFSQlJ5STZJaVI3VUVGSFJUcFNRVXRVUVVkOUlpd2lWRUZISWpvaVltOXRYM1J2YlhOb1lYSmtkMkZ5WlMweU1DSXNJa0ZOV2tGUVNTSTZJa0ZMU1VGS1RGbExVRkpNV0ZWVFJqUkhSRWxSSW4wc0ltMWxjbU5vWVc1MElqb2lRVzFoZW05dUlpd2ljM1J2WTJzaU9tNTFiR3dzSW1OaGJYQmhhV2R1WDNOamIzSmxJam94TENKdlptWmxjbDl6WTI5eVpTSTZNQ3dpWTJGdGNHRnBaMjVmWkc5dFlXbHVjeUk2V3lKK2RHOXRjMmhoY21SM1lYSmxMbU52YlNKZExDSnZabVpsY2w5cFpDSTZJbEpWZEV4VVZtUkxWRmgzZUU1VWFEaFViVll6WmtSQ09FMUJNaUlzSW1selgyOTFkRjl2Wmw5emRHOWpheUk2Wm1Gc2MyVXNJbWx6WDJ4dlkyRnNhWHBsWkNJNlptRnNjMlVzSW1selgyWnliMjFmY25Wc1pTSTZkSEoxWlN3aWFYTmZZM1Z6ZEc5dFgyOW1abVZ5SWpwbVlXeHpaU3dpYzJodmNuUmZiR2x1YXlJNmJuVnNiQ3dpYkdsdWExOTJZWEpwWVdKc1pYTWlPbTUxYkd3c0ltbHRZV2RsWDNWeWJDSTZiblZzYkgwPXxlc3VidHlwZTo6YnV5YnR0bnxidXR0b25JZDo6RUtLTVdKTS0xNTUwNjg3MDk1Mzc5Mjh8cHJvZHVjdElkOjpFS0tNV0pNfG1lcmNoYW50OjpBbWF6b258cHJpY2U6OiQ5Ljk5fHRyYW5zYWN0aW9uSWQ6OjE1NTA2ODcwOTUzNzkyOHxzaXRlOjp3d3cudG9tc2hhcmR3YXJlLmNvbXx0aW1lc3RhbXA6OjE1NTA2ODcwOTV8Z3VpZDo6ZW5fVVNfZmVlZF8zNDc2ZDgzMA==", 
+'desc': "\x3Cp\x3EDesigned\x20for\x204K\x20video,\x20music,\x20photos,\x20and\x20gaming,\x20this\x2064GB\x20Samsung\x20microSD\x20card\x20is\x20at\x20an\x20all\x2Dtime\x20price\x20low.\x20\x3Cbr\x3E\x3C\x2Fp\x3E",
+'merchant':"Amazon",
+'ups_product_id':"EKKMWJM",
+'csdatas':[{"BBC":"Favorite-Deals-ShoppingBlock_template"}]
+}  ],
+                "srcStyles":[]
+
+            }, conf || {});
+
+            var script = function(src, cb) {
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.onload = cb || function() {};
+                document.head.appendChild(s);
+                s.src = src;
+            };
+
+            var rid = Math.floor( Math.random() * 1e9 ).toString() + (new Date().getTime());
+            var dateObj = new Date();
+            var month = dateObj.getUTCMonth() + 1; //months from 1-12
+            var day = dateObj.getUTCDate();
+            var year = dateObj.getUTCFullYear();
+            CONFIG.rid = rid;
+            CONFIG.base = CONFIG.base || '//assets.purch.com/creative-templates/latest/';
+
+            script('//assets.purch.com/creative-templates/REVISION.js?t=' + (new Date()).getTime(), function() {
+                  CONFIG.revision = window.creativeRevision || [month, day, year].join('');                  
+                  Purch.CT_WIDGET_FACTORY.init(CONFIG);
+            });
+        }
+    };
+}());
+
+var Purch = window.Purch || {};
+Purch.CT_WIDGET_CONFIG = Purch.CT_WIDGET_CONFIG || {};
+Purch.CT_WIDGET_FACTORY = Purch.CT_WIDGET_FACTORY || (function(){
+
+    return {
+        init : function(CONFIG) {
+            //console.log('CT_WIDGET_FACTORY CONFIG', CONFIG);
+            Purch.CT_WIDGET_CONFIG[CONFIG.rid] = CONFIG ;
+
+            var targetEl = document.querySelector(CONFIG.target);
+            var params = CONFIG.widgetParams || {};
+            var widgetHeight = params.height + 'px' || 'auto';
+            if (!targetEl) {
+                console.warn('CTWFCTORY: no target found');
+                return;
+            }
+            var phId = CONFIG.phId + CONFIG.rid;
+            var div = '<div id="'+ phId +'" style="height:'+ widgetHeight+'"></div>';
+            if(CONFIG.position === 'replace'){
+                targetEl.innerHTML = div;
+            }else{
+                targetEl.insertAdjacentHTML(CONFIG.position, div);
+            }
+            var wrapper = document.getElementById(phId);
+            var el = document.createElement('iframe');
+            el.id = 'ctWidgetFrame'+ CONFIG.rid;
+            el.border = '0';
+            el.frameBorder = '0';
+            el.marginHeight = '0';
+            el.marginWidth = '0';
+            el.scrolling = 'no';
+            el.width = '100%';
+            el.height= '100%';
+            el.name ='ctWidgetFrame'+ CONFIG.rid;
+            el.setAttribute("data-rid", CONFIG.rid);
+            wrapper.appendChild(el);
+            el.onload = function() {
+                var idoc = el.contentDocument || el.contentWindow.document;
+idoc.head.insertAdjacentHTML('afterbegin', '<meta name=\'viewport\' content=\'width=device-width, initial-scale=1\'>');
+             idoc.body.innerHTML = '<div ng-app="'+CONFIG.ngApp+'"></div>';
+
+
+                var lib = idoc.createElement('script');
+                lib.type = 'text/javascript';
+                idoc.head.appendChild(lib);
+                lib.src = CONFIG.base + CONFIG.lib +'?r='+CONFIG.revision;
+            };
+            //var strConfig = 'CT_WIDGET_CONFIG='+JSON.stringify(CONFIG).replace(/"/g,'\\"');
+            el.src = 'javascript:"<html></html>"';             
+        }
+    };
+}());

@@ -1,0 +1,2 @@
+(function(f){var c=["localhost","lowpro.local","universiteitleiden.nl","leiden.edu","leidenuniv.nl"],a=f("#content article a");if(a.length){var d=location.hostname.split(".").slice(-2).join("."),h=".call-btn .facts .publications .pub-items .share .box".split(" ");a.each(function(){var e=f(this),a=e.attr("href"),g=this.hostname.split(".").slice(-2).join("."),b;this.protocol.match(/^https?:$/)&&!e.closest(h.join(",")).length&&(a&&this.pathname.match(/\.pdf$/i)?b="pdf":-1<c.indexOf(g)||!(-1<c.indexOf(d))&&
+(-1<c.indexOf(d)||d===g)||(b="external"),b&&e.addClass(b))})}})(jQuery);

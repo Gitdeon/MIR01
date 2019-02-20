@@ -1,0 +1,1 @@
+(function(a){a.fn.triggerClick=function(){a(this).on("click",function(c){var b=a(this);c=a(c.target);b=b.find("a");"A"!==c.prop("tagName")&&b.length&&(location.href=b.first().attr("href"))})};a(".trigger-click").triggerClick()})(jQuery);

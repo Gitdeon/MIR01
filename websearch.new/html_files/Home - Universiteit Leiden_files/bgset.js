@@ -1,0 +1,2 @@
+(function(e){e.fn.bgSet=function(){this.filter("[data-bgset]").each(function(){var a=e(this),g=a,d=a.data("bgset");a.is("img")&&(g=e(d),d=a.attr("srcset"));var a=d.split(/,\s?/),d=a.length-1,f=[],h=0,k,b;for(b in a){var c=a[b].split(" "),l=parseInt(c[1]),c=c[0];f.push([h,l,c]);h=l;parseInt(b)===d&&(k=c)}b=function(){var a=e(window).width(),b=null,d;for(d in f){var c=f[d];if(a>c[0]&&a<=c[1]){b=c[2];break}}null===b&&(b=k);g.css("background-image","url(%s)".replace("%s",b))};b();e(window).on("resize",
+b)})};e("[data-bgset]").bgSet()})(jQuery);

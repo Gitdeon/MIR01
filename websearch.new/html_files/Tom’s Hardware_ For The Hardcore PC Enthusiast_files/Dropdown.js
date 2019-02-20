@@ -1,0 +1,1 @@
+define("Purch/UI/Dropdown",[],function(){"use strict";return function(){var a=[].slice.call(document.querySelectorAll(".p-menu-allow-click"));a.length&&document.body.addEventListener("click",function(b){a.forEach(function(a){var c=a.querySelector(".p-menu-checkbox");c&&c.checked&&!a.contains(b.target)&&(c.checked=!1)})})}});
