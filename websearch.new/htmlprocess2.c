@@ -1,9 +1,3 @@
-//
-//  htmlprocess2.c
-//
-//  Created by Gideon Hanse on 21/02/2019.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,8 +33,7 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
    return size*nmemb;
 }
 
-int main(void)
-{
+char * GetWebPage(char * myurl) {
    CURL *curl;
    CURLcode res;
    
@@ -49,16 +42,23 @@ int main(void)
       struct string s;
       init_string(&s);
       
-      curl_easy_setopt(curl, CURLOPT_URL, "curl.haxx.se");
+      curl_easy_setopt(curl, CURLOPT_URL, myurl);
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
       res = curl_easy_perform(curl);
       
-      printf("%s\n", s.ptr);
+      return s.ptr;
       free(s.ptr);
       
       /* always cleanup */
       curl_easy_cleanup(curl);
    }
+   return NULL;
+}
+
+int main(int argc, char * argv[]) {
+   if( argc != 2 ) return 1;
+   printf(GetWebPage(argv[1]));
    return 0;
 }
+
