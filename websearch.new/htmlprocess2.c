@@ -5,18 +5,16 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include <curl/curl.h>
 #include <haut/string_util.h>
 #include <haut/haut.h>
 #include <haut/tag.h>
-#include <sstream>
-#include <iostream>
 
-/*using namespace std;
-
-typedef struct {
+/*
+ typedef struct {
    FILE *tmp1; // a pointer to the file save the data of HTML file
    FILE *tmp2; // a pointer to the file save web-links from the URL
    // .. Add your own datastructures here ...
@@ -57,59 +55,67 @@ int main(int argc, char *argv[]) {
 }
 */
 
-// callback function writes data to a std::ostream
-static size_t data_write(void* buf, size_t size, size_t nmemb, void* userp)
+// Define our struct for accepting LCs output
+struct BufferStruct
 {
-   if(userp)
-   {
-      std::ostream& os = *static_cast<std::ostream*>(userp);
-      std::streamsize len = size * nmemb;
-      if(os.write(static_cast<char*>(buf), len))
-         return len;
-   }
+   char * buffer;
+   size_t size;
+};
+
+// This is the function we pass to LC, which writes the output to a BufferStruct
+static size_t WriteMemoryCallback
+(void *ptr, size_t size, size_t nmemb, void *data)
+{
+   size_t realsize = size * nmemb;
    
-   return 0;
+   struct BufferStruct * mem = (struct BufferStruct *) data;
+   
+   mem->buffer = realloc(mem->buffer, mem->size + realsize + 1);
+   
+   if ( mem->buffer )
+   {
+      memcpy( &( mem->buffer[ mem->size ] ), ptr, realsize );
+      mem->size += realsize;
+      mem->buffer[ mem->size ] = 0;
+   }
+   return realsize;
 }
 
-/**
- * timeout is in seconds
- **/
-CURLcode curl_read(const std::string& url, std::ostream& os, long timeout = 30)
-{
-   CURLcode code(CURLE_FAILED_INIT);
-   CURL* curl = curl_easy_init();
-   
-   if(curl)
-   {
-      if(CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &data_write))
-         && CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L))
-         && CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L))
-         && CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_FILE, &os))
-         && CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout))
-         && CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_URL, url.c_str())))
-      {
-         code = curl_easy_perform(curl);
-      }
-      curl_easy_cleanup(curl);
-   }
-   return code;
-}
 
 int main()
 {
-   curl_global_init(CURL_GLOBAL_ALL);
    
-   std::ostringstream oss;
-   if(CURLE_OK == curl_read("http://google.com", oss))
+   curl_global_init( CURL_GLOBAL_ALL );
+   CURL * myHandle;
+   CURLcode result; // We’ll store the result of CURL’s webpage retrieval, for simple error checking.
+   struct BufferStruct output; // Create an instance of out BufferStruct to accept LCs output
+   output.buffer = NULL;
+   output.size = 0;
+   myHandle = curl_easy_init ( ) ;
+   
+   /* Notice the lack of major error checking, for brevity */
+   
+   curl_easy_setopt(myHandle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback); // Passing the function pointer to LC
+   curl_easy_setopt(myHandle, CURLOPT_WRITEDATA, (void *)&output); // Passing our BufferStruct to LC
+   curl_easy_setopt(myHandle, CURLOPT_URL, "http://www.liacs.nl");
+   result = curl_easy_perform( myHandle );
+   curl_easy_cleanup( myHandle );
+   
+   FILE * fp;
+   fp = fopen( "/tmp/example.html","w");
+   if( !fp )
+      return 1;
+   fprintf(fp, output.buffer );
+   fclose( fp );
+   
+   if( output.buffer )
    {
-      // Web page successfully written to string
-      std::string html = oss.str();
+      free ( output.buffer );
+      output.buffer = 0;
+      output.size = 0;
    }
    
-   if(CURLE_OK == curl_read("http://google.com", std::cout))
-   {
-      // Web page successfully written to standard output (console?)
-   }
-   
-   curl_global_cleanup();
+   printf("LibCurl rules!\n");
+   return 0;
 }
+
