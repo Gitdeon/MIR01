@@ -34,10 +34,24 @@ typedef struct {
 /* In this function, the HTML-file is written and HTML-code is passed to the parser. 
  * This function is called by CURL whenever data becomes available, which can be a chunk or the whole file at once*/
 static size_t 
-static size_t write_callback(void *ptr, size_t size, size_t nmemb, void *stream) {
-   size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
-   return written;
-}
+write_callback(char *buffer, size_t size, size_t nmemb, haut_t* parser)
+{ 
+    /* First of all, retrieve our custom state object */
+    state_t* myState =(state_t*)parser->userdata;
+    assert( myState );
+    
+    /* save the HTML file in tmp1 */
+    fwrite( buffer, size, nmemb, (FILE *)myState->tmp1 );
+    /* the size of the received data */
+    size_t realsize = size * nmemb; 
+
+    /* Pass the data chunk to the parser, nothing else needs to be done here.
+     * Note that if the parser encounters a token we are interested in, 
+     * it will automatically call our callback function. */
+    haut_parseChunk( parser, buffer, realsize );
+    
+    return realsize;
+} 
 
 /* This function is called everytime the parser has processed an attribute.
  * Arguments are a pointer to the parser object, the key and the value of the attribute.
@@ -113,16 +127,14 @@ static void process_url( char * url, haut_t *parser )
 
 char * GetWebPage(char *myurl, haut_t *parser) {
 	 CURL *curl = curl_easy_init();
-    curl_easy_setopt(curl, CURLOPT_URL, myurl);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-    tmp1 = fopen(pagefilename, "wb");
-    if(tmp1) {
-       curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp1);
-       curl_easy_perform(curl);
-       fclose(tmp1);
-    }
+	 if(curl) {
+		 curl_easy_setopt(curl, CURLOPT_URL, myurl);
+		 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+		 curl_easy_setopt(curl, CURLOPT_WRITEDATA, parser);
+		 CURLcode curl_res = curl_easy_perform(curl);
+	 }
 	 curl_easy_cleanup(curl);
-	 return tmp1;
+	 return parser;
 }
 
 
@@ -157,7 +169,6 @@ int main(int argc, char *argv[])
 
     /* Run download function */ 
     char webpage = GetWebPage( argv[1], &parser );
-    fprintf(webpage)
 
     /* Release the memory allocated by Haut */
     haut_destroy( &parser );
