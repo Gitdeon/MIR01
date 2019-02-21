@@ -35,7 +35,7 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 
 char * GetWebPage(char * myurl) {
    CURL *curl;
-   CURLcode res; 
+   CURLcode res;
    curl = curl_easy_init();
    if(curl) {
       struct string s;
@@ -48,8 +48,6 @@ char * GetWebPage(char * myurl) {
       
       return s.ptr;
       free(s.ptr);
-      
-      /* always cleanup */
       curl_easy_cleanup(curl);
    }
    return NULL;
