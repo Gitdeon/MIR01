@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
+#include <sys/stat.h>
+#include <haut/haut.h>
+#include <haut/tag.h>
+#include <haut/string_util.h>
 
 struct string {
    char *ptr;
@@ -52,11 +56,11 @@ char * GetWebPage(char * myurl) {
       curl_easy_setopt(curl, CURLOPT_URL, myurl);
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
-      res = curl_easy_perform(curl);
-      
+      res = curl_easy_perform(curl); 
       return s.ptr;
       free(s.ptr);
       curl_easy_cleanup(curl);
+
    }
    return NULL;
 }
@@ -68,14 +72,14 @@ char *GetLinksFromWebPage (char *myhtmlpage, char *myurl) {
    haut_t parser;
    haut_init( &parser );
    
-   haut_setInput ( &parser, myhtmlpage, html_size)
+   haut_setInput ( &parser, myhtmlpage, html_size);
    
-   p.events.attribute = myAttribute;
-   haut_parse( &p );
+   parser.events.attribute = myAttribute;
+   haut_parse( &parser );
    
    /* Clean up */
-   haut_destroy( &p );
-   
+   haut_destroy( &parser );
+   free (myhtmlpage);
    return NULL;
 }
 
