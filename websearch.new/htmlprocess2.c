@@ -69,6 +69,7 @@ char *GetLinksFromWebPage (char *myhtmlpage, char *myurl) {
    struct stat htmlstatus;
    int html_size;
    html_size = htmlstatus.st_size;
+ 
    haut_t parser;
    haut_init( &parser );
    
@@ -81,6 +82,11 @@ char *GetLinksFromWebPage (char *myhtmlpage, char *myurl) {
    haut_destroy( &parser );
    free (myhtmlpage);
    return NULL;
+}
+
+char *GetImageLinksFromWebPage (char *myhtmlpage, char *myurl) {
+   
+   
 }
 
 int main(int argc, char * argv[]) {
