@@ -18,7 +18,7 @@ void init_string(struct string *s) {
    s->ptr[0] = '\0';
 }
 
-size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
+size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
 {
    size_t new_len = s->len + size*nmemb;
    s->ptr = realloc(s->ptr, new_len+1);
@@ -33,6 +33,14 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
    return size*nmemb;
 }
 
+void myAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
+   
+   if( haut_currentElementTag( p ) == TAG_A ) {
+      if( strfragment_icmp( key, "href" ) && value && value->data )
+         printf( "%.*s\n", (int)value->size, value->data );
+   }
+}
+
 char * GetWebPage(char * myurl) {
    CURL *curl;
    CURLcode res;
@@ -42,7 +50,7 @@ char * GetWebPage(char * myurl) {
       init_string(&s);
       
       curl_easy_setopt(curl, CURLOPT_URL, myurl);
-      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
       res = curl_easy_perform(curl);
       
@@ -54,8 +62,20 @@ char * GetWebPage(char * myurl) {
 }
 
 char *GetLinksFromWebPage (char *myhtmlpage, char *myurl) {
-   printf(myhtmlpage, 'w');
-   printf("\n okay, this works \n");
+   struct stat htmlstatus;
+   int html_size;
+   html_size = htmlstatus.st_size;
+   haut_t parser;
+   haut_init( &parser );
+   
+   haut_setInput ( &parser, myhtmlpage, html_size)
+   
+   p.events.attribute = myAttribute;
+   haut_parse( &p );
+   
+   /* Clean up */
+   haut_destroy( &p );
+   
    return NULL;
 }
 
