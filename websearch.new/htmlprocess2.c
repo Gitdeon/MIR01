@@ -35,8 +35,7 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 
 char * GetWebPage(char * myurl) {
    CURL *curl;
-   CURLcode res;
-   
+   CURLcode res; 
    curl = curl_easy_init();
    if(curl) {
       struct string s;
@@ -57,8 +56,14 @@ char * GetWebPage(char * myurl) {
 }
 
 int main(int argc, char * argv[]) {
-   if( argc != 2 ) return 1;
-   printf(GetWebPage(argv[1]));
+   if( argc != 2 ) {
+      printf("Usage: ./htmlprocess <url>");
+      return 1;
+   }
+   printf(GetWebPage(argv[1]),'w');
+   FILE *fp = fopen("tmp/test.html", "ab");
+   fputs(GetWebPage(argv[1]), fp);
+   fclose(fp);
    return 0;
 }
 
