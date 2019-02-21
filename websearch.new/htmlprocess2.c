@@ -53,15 +53,27 @@ char * GetWebPage(char * myurl) {
    return NULL;
 }
 
+char *GetLinksFromWebPage (char *myhtmlpage, char *myurl) {
+   printf(myhtmlpage, 'w');
+   printf("\n okay, this works \n");
+   return NULL;
+}
+
 int main(int argc, char * argv[]) {
    if( argc != 2 ) {
       printf("Usage: ./htmlprocess <url>");
       return 1;
    }
-   printf(GetWebPage(argv[1]),'w');
-   FILE *fp = fopen("tmp/test.html", "ab");
-   fputs(GetWebPage(argv[1]), fp);
-   fclose(fp);
+   GetLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
    return 0;
 }
 
+
+
+/* used for testing:
+ 
+ FILE *fp = fopen("tmp/test.html", "ab");
+ fputs(GetWebPage(argv[1]), fp);
+ fclose(fp);
+ 
+*/
