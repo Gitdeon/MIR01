@@ -11,7 +11,6 @@
 #include <haut/string_util.h>
 #include <haut/haut.h>
 #include <haut/tag.h>
-#include <fstream>
 #include <sstream>
 #include <iostream>
 
@@ -99,12 +98,6 @@ CURLcode curl_read(const std::string& url, std::ostream& os, long timeout = 30)
 int main()
 {
    curl_global_init(CURL_GLOBAL_ALL);
-   
-   std::ofstream ofs("output.html");
-   if(CURLE_OK == curl_read("http://google.com", ofs))
-   {
-      // Web page successfully written to file
-   }
    
    std::ostringstream oss;
    if(CURLE_OK == curl_read("http://google.com", oss))
