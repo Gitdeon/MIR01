@@ -13,6 +13,7 @@
 #include <haut/haut.h>
 #include <haut/tag.h>
 #include <haut/string_util.h>
+#include <time.h>
 
 /* Usage:
  * getlinks [html-file]
@@ -62,10 +63,11 @@ main( int argc, char** argv ) {
     htmlfiles[8] = "html_files/Product reviews, how-tos, deals and the latest tech news - CNET.html";
     htmlfiles[9] = "html_files/Wikipedia, the free encyclopedia.html";
     
+    time_t start = clock();    
     for (int x = 0; x < 10; x++) {
     	/* First the dull part; read the filename from the command-line and read its contents */
-    	if( argc != 2 ) {
-        	fprintf( stderr, "Usage: %s [hmtl-file]\n", argv[0] );
+    	if( argc != 1 ) {
+        	fprintf( stderr, "Usage: %s \n", argv[0] );
         	return -1;
     	}
    	 const char* filename = htmlfiles[x];
@@ -131,6 +133,9 @@ main( int argc, char** argv ) {
    	 }
    	 free( file_contents );
     }
+    time_t stop = clock();
+    double elapsed = ((double)(stop - start))/CLOCKS_PER_SEC;
+    printf("Total parsing time for 1000 runs: %f seconds. \n", elapsed); 
     return 0;
 }
 
