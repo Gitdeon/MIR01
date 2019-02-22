@@ -42,6 +42,16 @@ void myAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
    if( haut_currentElementTag( p ) == TAG_A ) {
       if( strfragment_icmp( key, "href" ) && value && value->data )
          printf( "%.*s\n", (int)value->size, value->data );
+      // if url matches input url, put input url in front
+   }
+}
+
+void myImageAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
+   
+   if( haut_currentElementTag( p ) == TAG_A ) {
+      if( strfragment_icmp( key, "img" ) && value && value->data )
+         printf( "%.*s\n", (int)value->size, value->data );
+      // if url matches input url, put input url in front
    }
 }
 
@@ -85,7 +95,15 @@ char *GetLinksFromWebPage (char *myhtmlpage, char *myurl) {
 }
 
 char *GetImageLinksFromWebPage (char *myhtmlpage, char *myurl) {
+   struct stat htmlstatus;
+   int html_size;
+   html_size = htmlstatus.st_size;
    
+   haut_t parserl
+   haut_init( &parser);
+   haut_setInput( &parser, myhtmlpage, html_size);
+   parser.events.attribute = myImageAttributel;
+   haut_parse( &parser);
    
 }
 
