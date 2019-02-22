@@ -11,7 +11,7 @@ from lxml import html
 import time
 import re
 
-htmllist = []
+htmllist = [] #create and fill list with html sources
 htmllist.append("html_files/Computer Science at Leiden University - Leiden University.html")
 htmllist.append("html_files/Home - Universiteit Leiden.html")
 htmllist.append("html_files/Google Nieuws.html")
@@ -26,12 +26,12 @@ htmllist.append("html_files/Wikipedia, the free encyclopedia.html")
 tic = time.clock()
 
 links = []
-for i in range(0,10): 
-   soup = BeautifulSoup(open(htmllist[i]), "html.parser")
+for i in range(0,10):  #loop over html pages
+   soup = BeautifulSoup(open(htmllist[i]), "html.parser") #load page into parser object
    print("\n Links on ", htmllist[i], ": \n\n")
    for x in range (0,1000):
-      for link in soup.findAll('a', attrs={'href': re.compile("^http://")}):
-         links.append(link.get('href'))
+      for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
+         links.append(link.get('href')) #retrieve links
          print(*links, sep = "\n")
          links = []
          

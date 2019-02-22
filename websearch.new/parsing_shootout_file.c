@@ -1,4 +1,10 @@
-/* getlinks - Example program using Haut
+/* Parsing shootout_file , Gideon Hanse
+ *
+ * usage: ./getlinks to parse all files in html_files folder.
+ * Make sure the folder with html_files is in the same directory.
+ *
+ *
+ * Modified getlinks - Example program using Haut; all credits to:
  *
  * https://github.com/mickymuis/haut-html
  *
@@ -14,12 +20,6 @@
 #include <haut/tag.h>
 #include <haut/string_util.h>
 #include <time.h>
-
-/* Usage:
- * getlinks [html-file]
- *
- * Obtains all links of type <a href=% from a given HTML-page.
- */
 
 /* This function is called everytime the parser has processed an attribute.
  * Arguments are a pointer to the parser object, the key and the value of the attribute.
@@ -51,7 +51,7 @@ myAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
 
 int
 main( int argc, char** argv ) {
-    const char *htmlfiles[9];
+    const char *htmlfiles[9]; /* Create and fill array with html sources */
     htmlfiles[0] = "html_files/Computer Science at Leiden University - Leiden University.html";
     htmlfiles[1] = "html_files/Home - Universiteit Leiden.html";
     htmlfiles[2] = "html_files/Google Nieuws.html";
