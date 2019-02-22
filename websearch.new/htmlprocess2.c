@@ -48,8 +48,8 @@ void myAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
 
 void myImageAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
    
-   if( haut_currentElementTag( p ) == TAG_A ) {
-      if( strfragment_icmp( key, "img" ) && value && value->data )
+   if( haut_currentElementTag( p ) == TAG_IMG ) {
+      if( strfragment_icmp( key, "src" ) && value && value->data )
          printf( "%.*s\n", (int)value->size, value->data );
       // if url matches input url, put input url in front
    }
@@ -99,12 +99,14 @@ char *GetImageLinksFromWebPage (char *myhtmlpage, char *myurl) {
    int html_size;
    html_size = htmlstatus.st_size;
    
-   haut_t parserl
+   haut_t parser;
    haut_init( &parser);
    haut_setInput( &parser, myhtmlpage, html_size);
-   parser.events.attribute = myImageAttributel;
+   parser.events.attribute = myImageAttribute;
    haut_parse( &parser);
-   
+   haut_destroy ( &parser);
+   free (myhtmlpage);
+   return NULL;
 }
 
 int main(int argc, char * argv[]) {
@@ -112,7 +114,7 @@ int main(int argc, char * argv[]) {
       printf("Usage: ./htmlprocess <url>");
       return 1;
    }
-   GetLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
+   GetImageLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
    return 0;
 }
 
