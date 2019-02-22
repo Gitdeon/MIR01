@@ -7,6 +7,8 @@
 #include <haut/tag.h>
 #include <haut/string_util.h>
 
+static char * myurl;
+
 struct string {
    char *ptr;
    size_t len;
@@ -40,18 +42,22 @@ size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
 void myAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
    
    if( haut_currentElementTag( p ) == TAG_A ) {
-      if( strfragment_icmp( key, "href" ) && value && value->data )
-         printf( "%.*s\n", (int)value->size, value->data );
-      // if url matches input url, put input url in front
+      if( strfragment_icmp( key, "href" ) && value && value->data ) {
+	printf( myurl );
+	printf( "%.*s\n", (int)value->size, value->data );
+      }
+	// if url matches input url, put input url in front
    }
 }
 
 void myImageAttribute( haut_t* p, strfragment_t* key, strfragment_t* value ) {
    
    if( haut_currentElementTag( p ) == TAG_IMG ) {
-      if( strfragment_icmp( key, "src" ) && value && value->data )
+      if( strfragment_icmp( key, "src" ) && value && value->data ) {
+         printf( myurl );
          printf( "%.*s\n", (int)value->size, value->data );
-      // if url matches input url, put input url in front
+       }
+	 // if url matches input url, put input url in front
    }
 }
 
@@ -114,6 +120,10 @@ int main(int argc, char * argv[]) {
       printf("Usage: ./htmlprocess <url>");
       return 1;
    }
+   myurl = argv[1];
+   printf ("All links on page: \n\n");
+   GetLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
+   printf ("All image links on page: \n\n");
    GetImageLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
    return 0;
 }
