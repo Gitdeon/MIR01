@@ -9,6 +9,7 @@ Created on Wed Feb 20 20:32:58 2019
 from bs4 import BeautifulSoup
 from lxml import html
 import time
+import re
 
 htmllist = []
 htmllist.append("html_files/Computer Science at Leiden University - Leiden University.html")
@@ -28,7 +29,7 @@ links = []
 for i in range(0,10): 
    soup = BeautifulSoup(open(htmllist[i]), "html.parser")
    print("\n Links on ", htmllist[i], ": \n\n")
-   for x in range (0,100):
+   for x in range (0,1000):
       for link in soup.findAll('a', attrs={'href': re.compile("^http://")}):
          links.append(link.get('href'))
          print(*links, sep = "\n")
